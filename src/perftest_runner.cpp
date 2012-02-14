@@ -1,5 +1,5 @@
 /******************************************************************************** 
-Copyright (c) 2012, Francisco Claude.
+Copyright (c) 2012, Francisco Claude, Roberto Konow.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -86,7 +86,8 @@ namespace perftest {
         output << "{" << endl;
         // This is a vector of <sdt::wstring, JSONValue>
         JSONObject objects = root->AsObject();
-        double overall_time = 0.0;
+      
+        Timer overall_time;        
         for(JSONObject::iterator it = objects.begin(); it != objects.end(); ++it) {
             string tmp((it->first).begin(), (it->first).end());
             output << "experiment_name: \"" << tmp << "\"" << endl;
@@ -95,15 +96,19 @@ namespace perftest {
                 output << "result: \"error\"" << endl;
             } else {
                 cout << "\tRunning experiment " << tmp << endl;
-                start_timing();
+                Timer experiment_time;
                 wstring result = registeredExperiments[tmp](it->second->Stringify());
-                overall_time = get_timing();
+
+                experiment_time.stop();
+                
                 string tmp_result(result.begin(), result.end());
                 output << "result: " << tmp_result << endl;
+                output << "experiment_time:" << experiment_time.elapsedTime() << endl;
             }
         }
-        output << "overall_time:" << overall_time << endl;
-        output << getSystemInformation();
+        overall_time.stop();
+        output << "overall_time:" << overall_time.elapsedTime() << endl;
+        output << GetSystemInformation();
         output << "}" << endl;
     }
 };
