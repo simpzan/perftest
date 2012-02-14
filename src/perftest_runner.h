@@ -36,6 +36,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #include <map>
 #include <string>
 #include <iostream>
+#include "timing.h"
+#include "system_information.h"
     
 using std::ifstream;
 using std::ofstream;

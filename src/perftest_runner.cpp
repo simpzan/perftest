@@ -32,7 +32,8 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <iostream>
 #include <fstream>
-
+#include <unistd.h>
+#include <stdlib.h>
 #include <JSON.h>
 #include <JSONValue.h>
 
@@ -45,6 +46,7 @@ using std::ios;
 using std::cout;
 
 #include "perftest_runner.h"
+
 
 namespace perftest {
 
@@ -84,6 +86,7 @@ namespace perftest {
         output << "{" << endl;
         // This is a vector of <sdt::wstring, JSONValue>
         JSONObject objects = root->AsObject();
+        double overall_time = 0.0;
         for(JSONObject::iterator it = objects.begin(); it != objects.end(); ++it) {
             string tmp((it->first).begin(), (it->first).end());
             output << "experiment_name: \"" << tmp << "\"" << endl;
@@ -92,11 +95,15 @@ namespace perftest {
                 output << "result: \"error\"" << endl;
             } else {
                 cout << "\tRunning experiment " << tmp << endl;
+                start_timing();
                 wstring result = registeredExperiments[tmp](it->second->Stringify());
+                overall_time = get_timing();
                 string tmp_result(result.begin(), result.end());
                 output << "result: " << tmp_result << endl;
             }
         }
+        output << "overall_time:" << overall_time << endl;
+        output << getSystemInformation();
         output << "}" << endl;
     }
 };

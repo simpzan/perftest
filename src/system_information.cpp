@@ -1,5 +1,5 @@
-/******************************************************************************** 
-Copyright (c) 2012, Francisco Claude.
+	/******************************************************************************** 
+Copyright (c) 2012, Roberto Konow.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -28,54 +28,48 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ********************************************************************************/
+#include <sstream>
 
-#include <iostream>
-#include <fstream>
+#include "system_information.h"
 
-using std::cout;
-using std::cerr;
+using std::stringstream;
 using std::endl;
-using std::ifstream;
-using std::ofstream;
-using std::wstring;
-using std::string;
 
-#include "perftest_runner.h"
+namespace perftest { 
+	// TODO: Add CPU speed , OS Version , Compilation options
 
+	const char *getUserName()
+	{
+		#if defined(WIN32) && !defined(__GNUC__)
+			return "Not Available\0";
+		#else
+			return getenv("USER");
+		#endif
+	}
+	const int getNumpPocessors()
+	{
+		#if defined(WIN32) && !defined(__GNUC__)
+			return -1;
+		#else
+			return sysconf(_SC_NPROCESSORS_ONLN);
+		#endif
+	}
+	const int getMemory()
+	{
+		#if defined(WIN32) && !defined(__GNUC__)
+			return -1;
+		#else
+			return (sysconf(_SC_PHYS_PAGES) * sysconf(_SC_PAGESIZE))/(1024*1024);
+		#endif
+		
+	}
+	const char *getSystemInformation()
+	{
+		stringstream result;
+		result <<  "num_processors: "<< getNumpPocessors() << endl << 
+		"memory: " << getMemory()  << endl << 
+		"username: \"" << getUserName() << "\"" << endl;
+		return result.str().c_str();
+	}
 
-using perftest::RunExperiments;
-
-int main(int argc, char **argv) {
-    // TODO: we can use optargs or something like that to support more flags. 
-    // With the current interface it would be an overkill.
-    if (argc!=3) {
-        cout << "usage: " << argv[0] << " <input:json> <output:json>" << endl;
-        return 0;
-    }
-
-    if (string(argv[1]) == string(argv[2])) {
-        cerr << "You are trying to overwrite the input file." << endl;
-        return 3;
-    }
-
-    ifstream input(argv[1]);
-    if (!input.good()) {
-        cerr << "Error opening " << argv[1] << " for reading" << endl;
-        return 1;
-    }
-
-    // TODO: Check if output file exists and only allow overwrite with a specific flag?
-
-    ofstream output(argv[2]);
-    if (!output.good()) {
-        cerr << "Error opening " << argv[2] << " for writing" << endl;
-        return 2;
-    }
-
-    RunExperiments(input, output);
-
-    input.close();
-    output.close();
-
-    return 0;
 }

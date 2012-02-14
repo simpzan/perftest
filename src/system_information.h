@@ -1,5 +1,5 @@
 /******************************************************************************** 
-Copyright (c) 2012, Francisco Claude.
+Copyright (c) 2012, Roberto Konow.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -28,54 +28,20 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ********************************************************************************/
+#ifndef SRC_SYSTEM_INFORMATION_H_
+#define SRC_SYSTEM_INFORMATION_H_
 
-#include <iostream>
-#include <fstream>
-
-using std::cout;
-using std::cerr;
-using std::endl;
-using std::ifstream;
-using std::ofstream;
-using std::wstring;
-using std::string;
-
-#include "perftest_runner.h"
+#include <stdlib.h>
+#include <unistd.h>
+#include <JSON.h>
+#include <JSONValue.h>
 
 
-using perftest::RunExperiments;
+namespace perftest {
+	const char *getUserName();
+	const int getNumpPocessors();
+	const int getMemory();
+	const char* getSystemInformation();
+};
 
-int main(int argc, char **argv) {
-    // TODO: we can use optargs or something like that to support more flags. 
-    // With the current interface it would be an overkill.
-    if (argc!=3) {
-        cout << "usage: " << argv[0] << " <input:json> <output:json>" << endl;
-        return 0;
-    }
-
-    if (string(argv[1]) == string(argv[2])) {
-        cerr << "You are trying to overwrite the input file." << endl;
-        return 3;
-    }
-
-    ifstream input(argv[1]);
-    if (!input.good()) {
-        cerr << "Error opening " << argv[1] << " for reading" << endl;
-        return 1;
-    }
-
-    // TODO: Check if output file exists and only allow overwrite with a specific flag?
-
-    ofstream output(argv[2]);
-    if (!output.good()) {
-        cerr << "Error opening " << argv[2] << " for writing" << endl;
-        return 2;
-    }
-
-    RunExperiments(input, output);
-
-    input.close();
-    output.close();
-
-    return 0;
-}
+#endif

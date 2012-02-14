@@ -28,54 +28,17 @@ ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 ********************************************************************************/
+#include "timing.h"
+namespace perftest {
 
-#include <iostream>
-#include <fstream>
-
-using std::cout;
-using std::cerr;
-using std::endl;
-using std::ifstream;
-using std::ofstream;
-using std::wstring;
-using std::string;
-
-#include "perftest_runner.h"
-
-
-using perftest::RunExperiments;
-
-int main(int argc, char **argv) {
-    // TODO: we can use optargs or something like that to support more flags. 
-    // With the current interface it would be an overkill.
-    if (argc!=3) {
-        cout << "usage: " << argv[0] << " <input:json> <output:json>" << endl;
-        return 0;
+    clock_t init;
+    void start_timing() {
+        init = clock();
     }
 
-    if (string(argv[1]) == string(argv[2])) {
-        cerr << "You are trying to overwrite the input file." << endl;
-        return 3;
+    double get_timing() {
+        clock_t fin = clock();
+        return (1000.*(fin-init)/CLOCKS_PER_SEC);
     }
 
-    ifstream input(argv[1]);
-    if (!input.good()) {
-        cerr << "Error opening " << argv[1] << " for reading" << endl;
-        return 1;
-    }
-
-    // TODO: Check if output file exists and only allow overwrite with a specific flag?
-
-    ofstream output(argv[2]);
-    if (!output.good()) {
-        cerr << "Error opening " << argv[2] << " for writing" << endl;
-        return 2;
-    }
-
-    RunExperiments(input, output);
-
-    input.close();
-    output.close();
-
-    return 0;
-}
+};
