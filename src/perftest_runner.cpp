@@ -60,8 +60,9 @@ namespace perftest {
         input.seekg(0, ios::end);
         size_t input_length = input.tellg();
         input.seekg(0, ios::beg);
-        char * input_content = new char[input_length];
+        char * input_content = new char[input_length+1];
         input.read(input_content, input_length);
+        input_content[input_length] = 0;
 
         map<string, fnptr> &registeredExperiments = RegisterExperiment("", NULL);
         cout << "Registered experiments: " << endl;
@@ -84,23 +85,16 @@ namespace perftest {
         // This is a vector of <sdt::wstring, JSONValue>
         JSONObject objects = root->AsObject();
         for(JSONObject::iterator it = objects.begin(); it != objects.end(); ++it) {
-            char * tmp_c = new char[(it->first).length()];
-            for (size_t i = 0; i < (it->first).length(); i++)
-                tmp_c[i] = (char)(it->first)[i];
-            string tmp(tmp_c);
+            string tmp((it->first).begin(), (it->first).end());
             output << "experiment_name: \"" << tmp << "\"" << endl;
-            delete [] tmp_c;
             if (registeredExperiments.count(tmp) == 0) {
                 cout << "\tExperiment " << tmp << " is not registered." << endl;
                 output << "result: \"error\"" << endl;
             } else {
                 cout << "\tRunning experiment " << tmp << endl;
                 wstring result = registeredExperiments[tmp](it->second->Stringify());
-                char * tmp_c = new char[result.length()];
-                for(size_t i = 0; i < result.length(); i++)
-                    tmp_c[i] = (char)result[i];
-                output << "result: " << tmp_c << endl;
-                delete [] tmp_c;
+                string tmp_result(result.begin(), result.end());
+                output << "result: " << tmp_result << endl;
             }
         }
         output << "}" << endl;
