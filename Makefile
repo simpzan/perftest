@@ -3,7 +3,7 @@ CPP=g++
 CPPFLAGS=-O0 -g3 -Wall
 INCLUDES=-I./dep/MJPA-SimpleJSON/src/ -I./src/
 OBJECTS=./dep/MJPA-SimpleJSON/src/JSON.o ./dep/MJPA-SimpleJSON/src/JSONValue.o \
-	./src/perftest_main.o ./src/perftest_runner.o
+	./src/perftest_main.o ./src/perftest_runner.o ./src/system_information.o ./src/timing.o
 LIB=./lib/perftest.a
 
 
