@@ -1,5 +1,5 @@
 	/******************************************************************************** 
-Copyright (c) 2012, Roberto Konow.
+Copyright (c) 2012, Roberto Konow, Francisco Claude
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -34,11 +34,12 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 using std::stringstream;
 using std::endl;
+using std::string;
 
 namespace perftest { 
 	// TODO: Add CPU speed , OS Version , Compilation options
 
-	const char *getUserName()
+	const char *GetUserName()
 	{
 		#if defined(WIN32) && !defined(__GNUC__)
 			return "Not Available\0";
@@ -46,7 +47,7 @@ namespace perftest {
 			return getenv("USER");
 		#endif
 	}
-	const int getNumpPocessors()
+	const int GetNumProcessors()
 	{
 		#if defined(WIN32) && !defined(__GNUC__)
 			return -1;
@@ -54,7 +55,7 @@ namespace perftest {
 			return sysconf(_SC_NPROCESSORS_ONLN);
 		#endif
 	}
-	const int getMemory()
+	const int GetMemory()
 	{
 		#if defined(WIN32) && !defined(__GNUC__)
 			return -1;
@@ -63,13 +64,13 @@ namespace perftest {
 		#endif
 		
 	}
-	const char *getSystemInformation()
+	const string GetSystemInformation()
 	{
 		stringstream result;
-		result <<  "num_processors: "<< getNumpPocessors() << endl << 
-		"memory: " << getMemory()  << endl << 
-		"username: \"" << getUserName() << "\"" << endl;
-		return result.str().c_str();
+		result <<  "num_processors: "<< GetNumProcessors() << endl << 
+		"memory: " << GetMemory()  << endl << 
+		"username: \"" << GetUserName() << "\"" << endl;
+		return result.str();
 	}
 
 }

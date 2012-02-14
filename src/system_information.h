@@ -1,5 +1,5 @@
 /******************************************************************************** 
-Copyright (c) 2012, Roberto Konow.
+Copyright (c) 2012, Roberto Konow,Francisco Claude.
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without modification,
@@ -33,15 +33,16 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #include <stdlib.h>
 #include <unistd.h>
-#include <JSON.h>
-#include <JSONValue.h>
+#include <string>
+
+using std::string;
 
 
 namespace perftest {
-	const char *getUserName();
-	const int getNumpPocessors();
-	const int getMemory();
-	const char* getSystemInformation();
+	const char *GetUserName();
+	const int GetNumProcessors();
+	const int GetMemory();
+	const string GetSystemInformation();
 };
 
 #endif
