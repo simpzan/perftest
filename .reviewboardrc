@@ -1,0 +1,2 @@
+REPOSITORY = 'perftest'
+REVIEWBOARD_URL = "http://reviews.recoded.cl"
