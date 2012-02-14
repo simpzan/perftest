@@ -42,29 +42,29 @@ class Timer {
     /** Creates and starts the timer.
      */
     Timer() {
-      restart();
+      Restart();
     }
 
     /** Restarts the timer.
      */
-    void restart() {
-      initial = clock();
+    void Restart() {
+      initial_ = clock();
     }
 
     /** Stops the timer.
      */
-    void stop() {
-      final = clock();
+    void Stop() {
+      final_ = clock();
     }
 
     /** Computes the number of miliseconds elapsed from start to stop.
      */
-    double elapsedTime() {
-      return 1000.*(final - initial) / CLOCKS_PER_SEC;
+    double ElapsedTime() {
+      return 1000.*(final_ - initial_) / CLOCKS_PER_SEC;
     }
 
   protected:
-    clock_t initial, final;
+    clock_t initial_, final_;
 };
 };
 
